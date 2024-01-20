@@ -29,12 +29,12 @@ def doRinRout(nin,nout,ndyin,ndyout,ch1,ch2):
     sfUnc = sf*ROOT.TMath.Sqrt( (nlloutUnc/nllout)**2+(ndyout[ch1][1]/ndyout[ch1][0])**2 )
 
     #print report
-    print '-'*20,ch1,'-'*20
-    print 'R_{out/nin}(MC)=%f +/- %f'%(routin,routinUnc)
-    print 'k_{\\ell,\\ell}=%f +/- %f'%(kll,kllUnc)
-    print 'N_{\\rm in}(data)=',nin[ch1][0]
-    print 'N_{\\rm out}=%f +/- %f'%(nllout,nlloutUnc)
-    print 'SF_{\\rm DY}=%f +/- %f'%(sf,sfUnc)
-    print '-'*50
+    print('-'*20,ch1,'-'*20)
+    print('R_{out/nin}(MC)=%f +/- %f'%(routin,routinUnc))
+    print('k_{\\ell,\\ell}=%f +/- %f'%(kll,kllUnc))
+    print('N_{\\rm in}(data)=',nin[ch1][0])
+    print('N_{\\rm out}=%f +/- %f'%(nllout,nlloutUnc))
+    print('SF_{\\rm DY}=%f +/- %f'%(sf,sfUnc))
+    print('-'*50)
 
     return (sf,sfUnc)

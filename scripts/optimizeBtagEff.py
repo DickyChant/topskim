@@ -192,11 +192,11 @@ def main():
         if abs(eff-wpEff)>abs(bestEff-wpEff): continue
         bestCut=x
         bestEff=eff
-    print '<'*50
-    print 'csv>',bestCut
+    print('<'*50)
+    print('csv>',bestCut)
     for tag in csv:
-        print tag,'eff=',csv[tag].Eval(bestCut)
-    print '<'*50
+        print(tag,'eff=',csv[tag].Eval(bestCut))
+    print('<'*50)
 
     #compare the curves
     for name,grNames in [ ('csveff',       ['b',  'udsg',  'unmatched']), 

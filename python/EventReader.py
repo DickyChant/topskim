@@ -29,10 +29,10 @@ class PhysicsObject:
             pt=self.calpt if hasattr(self,'calpt') else self.pt
             self.p4.SetPtEtaPhiM(pt,self.eta,self.phi,self.mass)
         except Exception as e:
-            print '<'*50
-            print 'Unable to set p4'
-            print e
-            print '<'*50
+            print('<'*50)
+            print('Unable to set p4')
+            print(e)
+            print('<'*50)
 
     def setGlobalEventProperties(self,propDict):
         for key in propDict:

@@ -21,7 +21,7 @@ if not '.pck' in url:
         t.Add(os.path.join(url,f))
 
     #loop over events
-    print 'Analysing',t.GetEntries(),'events'
+    print('Analysing',t.GetEntries(),'events')
     dilCollection={11*11:[],11*13:[],13*13:[]}
     for iev in range(t.GetEntries()):
         t.GetEntry(iev)
@@ -29,7 +29,7 @@ if not '.pck' in url:
             dil=getDilepton(t,[13,11],doMiniIsolation=True)
             dilCollection[dil.flavour].append(dil)
         except Exception as e:
-            print e
+            print(e)
             pass
 
     #save dict in a cache
@@ -53,7 +53,7 @@ ht.add( ROOT.TH1F('mll',   ";Dilepton invariant mass [GeV];Events",20,0,200) )
 ht.add( ROOT.TH1F('sphericity',   ";Sphericity;Events",20,0,1) )
 
 for key in dilCollection:
-    print 'processing',flavCats[key]
+    print('processing',flavCats[key])
 
     for dil in dilCollection[key]:
         
@@ -95,4 +95,4 @@ for key in dilCollection:
 
 url='combbackground_plots_%s.root'%dataType
 ht.writeToFile(url)
-print 'Plots can be found in',url
+print('Plots can be found in',url)

@@ -29,7 +29,7 @@ def prepareDileptonCollection(url,tag='Skim',maxEvents=-1):
         t.Add(os.path.join(url,f))
 
     #loop over events
-    print 'Analysing',t.GetEntries(),'events'
+    print('Analysing',t.GetEntries(),'events')
     dilCollection=defaultdict(list)
     jetCollection=defaultdict(list)
     nevts=t.GetEntries()
@@ -42,7 +42,7 @@ def prepareDileptonCollection(url,tag='Skim',maxEvents=-1):
             dilCollection[key].append(dil)
             jetCollection[key].append(getJets(t))
         except Exception as e:
-            print e
+            print(e)
             pass
 
     #save dict in a cache
@@ -161,10 +161,10 @@ def createMixedFriendTrees(url,mixFile,outURL,nEventsPerChunk=100,maxChunks=-1):
         orig_t.Add(os.path.join(url,f))
 
         nentries=orig_t.GetEntries()
-        print 'Mixing',nentries,'events from',f,'output @',out_f.GetName()
+        print('Mixing',nentries,'events from',f,'output @',out_f.GetName())
         for iev in range(nentries):
 
-            if iev%500==0 : print iev,'/',nentries
+            if iev%500==0 : print(iev,'/',nentries)
 
             #original event
             orig_t.GetEntry(iev)
@@ -179,7 +179,7 @@ def createMixedFriendTrees(url,mixFile,outURL,nEventsPerChunk=100,maxChunks=-1):
             for i,j in [(0,1),(1,0)]:
 
                 #create a random set of event chunks
-                candDil=range(nDilCandidates)
+                candDil=list(range(nDilCandidates))
                 random.shuffle(candDil)
                 for k in range(nChunks):
                     dilChoices=candDil[k*nEventsPerChunk:(k+1)*nEventsPerChunk]

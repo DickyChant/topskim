@@ -44,7 +44,7 @@ exp={'PbPb':
             ('2l_{OS}/l+jets', 69.5, 6.1, 6.1, 5.8, 5.8),
         ]
      }
-print exp['PbPb']
+print(exp['PbPb'])
 #datasetleg={'pPb': 'pPb, 180 nb^{-1}, (#sqrt{s_{NN}}=8.16 TeV)',
 #            'pp' : 'pp, 19.6 fb^{-1}, (#sqrt{s}=8 TeV)'}
 #
@@ -117,7 +117,7 @@ for key in exp:
 
         theody=len(theo[key])
 
-        for i in xrange(0,len(theo[key])):
+        for i in range(0,len(theo[key])):
             title,mu,pdfDn,pdfUp,scaleDn,scaleUp=theo[key][i]
             if key=='pp':
                 mu      *= P2PPBSCALE
@@ -127,7 +127,7 @@ for key in exp:
                 scaleDn *= P2PPBSCALE
             totDn=ROOT.TMath.Sqrt(pdfDn**2+scaleDn**2)
             totUp=ROOT.TMath.Sqrt(pdfUp**2+scaleUp**2)
-            print key,mu,totDn,totUp
+            print(key,mu,totDn,totUp)
             theoPDFGr.append( ROOT.TGraph() )
             theoPDFGr[-1].SetTitle(title)
             theoPDFGr[-1].SetName('theopdf_%s_%d'%(key,i))
@@ -166,7 +166,7 @@ for key in exp:
     #    labels.DrawLatex(5,dy-1.2,'#scale[0.5]{#it{Data scaled by A #upoint #frac{#sigma_{NNLO+NNLL}(8.16 TeV)}{#sigma_{NNLO+NNLL}(8 TeV)}}}')
 
     ROOT.gStyle.SetEndErrorSize(5)
-    for i in xrange(0,len(exp[key])):
+    for i in range(0,len(exp[key])):
         expStatGr.append( ROOT.TGraphAsymmErrors() )
         expStatGr[-1].SetMarkerStyle(0)
         expStatGr[-1].SetLineWidth(3)

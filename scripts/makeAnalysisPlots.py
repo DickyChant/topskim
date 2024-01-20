@@ -78,8 +78,8 @@ def showRateVsRun(url,catList=['e','m']):
         q=np.percentile(rates,50,axis=0)[1]
         lowRates=rates[rates[:,1]<q*0.5][:,0].flatten()
         runs=[int(histos[c].GetXaxis().GetBinLabel(int(i))) for i in lowRates]        
-        print 'Runs for',c,'with rate < %f/2'%q
-        print runs
+        print('Runs for',c,'with rate < %f/2'%q)
+        print(runs)
 
         #add to plot
         title='e' if c[0]=='e' else '#mu'
@@ -217,7 +217,7 @@ def computeDYScaleFactors(url):
     sfProd=dySF['ee'][0]*dySF['mm'][0]
     sfProdUnc=ROOT.TMath.Sqrt((dySF['ee'][0]*dySF['mm'][1])**2+(dySF['mm'][0]*dySF['ee'][1])**2)        
     dySF['em']=(ROOT.TMath.Sqrt(sfProd),0.5*sfProdUnc/ROOT.TMath.Sqrt(sfProd))
-    print 'SF_{em}=%f +/- %f'%(dySF['em'][0],dySF['em'][1])
+    print('SF_{em}=%f +/- %f'%(dySF['em'][0],dySF['em'][1]))
     return dySF
 
 def compareElectrons(url,dist):
@@ -253,7 +253,7 @@ def doEleIDPlots(url):
 
             try:
                 plots=getDataSummedUp(url,cats,dist,'Skim',False)
-                print dist,reg
+                print(dist,reg)
                 #show the plots for simple variables
                 p=Plot('%s%s'%(dist,reg),com='5.02 TeV')
                 p.add(plots[cats[0]],title='Z#rightarrowee (data)',color=1,isData=True,spImpose=False,isSyst=False)
@@ -261,7 +261,7 @@ def doEleIDPlots(url):
                 p.savelog=True
                 p.show(outDir='./',lumi=LUMI,noRatio=True)
             except:
-                print 'Failed for',dist,'in',reg
+                print('Failed for',dist,'in',reg)
 
 def doMuIDPlots(url):
 
@@ -288,7 +288,7 @@ def doIsolationROCs(url,ch='ee'):
             dist=c+d 
             for l in ['l1','l2']:
                 plots=getDataSummedUp(url,cats,l+dist,'Skim',False)
-                print plots
+                print(plots)
                 if l=='l1':
                     data[dist]=plots
                 else:
@@ -419,7 +419,7 @@ def doJetHotSpots(url,cats):
     for cat in cats:
         h.Add(data['pf1jetavsphi'][cat])
         h.Add(data['pf2jetavsphi'][cat])
-        print cat,h.Integral()
+        print(cat,h.Integral())
     h.Draw('colz')
     h.Rebin2D(2,2)
     txt=ROOT.TLatex()

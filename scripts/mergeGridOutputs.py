@@ -28,7 +28,7 @@ def main():
     if opt.farm: FARMDIR += opt.farm
     os.system('mkdir -p %s'%FARMDIR)
     os.system('rm  %s/*'%FARMDIR)
-    print 'Submissions scripts @ ',FARMDIR
+    print('Submissions scripts @ ',FARMDIR)
 
     onlyList=opt.only.split(',') if opt.only else []
 
@@ -69,7 +69,7 @@ def main():
             for pubDir in pub_list:
 
                 if not 'crab' in pubDir:
-                    print 'Ambiguity found @ <publication-name> for <primary-dataset>=%s , bailing out'%dsetname
+                    print('Ambiguity found @ <publication-name> for <primary-dataset>=%s , bailing out'%dsetname)
                     continue
                 pub=pubDir.split('/crab_')[-1]
 
@@ -80,7 +80,7 @@ def main():
                         found=True
                         break
                     if not found : 
-                        print 'Skipping %s, not in process only list'%pub
+                        print('Skipping %s, not in process only list'%pub)
                         continue
 
                 #check if it's an extension
@@ -89,13 +89,13 @@ def main():
                     extSplit=pub.split('_ext')
                     pubExt='ext%d'%(len(extSplit)-1)
                     pub=extSplit[0]
-                    print 'Extension will be postfixed with ',pubExt
+                    print('Extension will be postfixed with ',pubExt)
                 except:
-                    print 'Core sample (no extension)'
+                    print('Core sample (no extension)')
                 
                 time_list=getEOSlslist(directory=pubDir,prepend='')
                 if len(time_list)!=1:
-                    print 'Ambiguity found @ <time-stamp> for <primary-dataset>=%s , bailing out'%dsetname
+                    print('Ambiguity found @ <time-stamp> for <primary-dataset>=%s , bailing out'%dsetname)
                     continue
                 time_stamp=time_list[0].split('/')[-1]
 
@@ -103,8 +103,8 @@ def main():
                 count_list=getEOSlslist(directory=time_list[0],prepend='')
 
                 chunkList=getChunksInSizeOf(chunkSize=opt.chunkSize,directoryList=count_list,prepend='/eos/cms/')
-                print pub,'will be hadded in',len(chunkList),'chunks of approx %fGb'%opt.chunkSize
-                for ichunk in xrange(0,len(chunkList)):
+                print(pub,'will be hadded in',len(chunkList),'chunks of approx %fGb'%opt.chunkSize)
+                for ichunk in range(0,len(chunkList)):
                     outFile='/eos/cms/{0}/{1}/Chunk_{2}_{3}.root'.format(opt.outDir,pub,ichunk,pubExt)
                     condor.write('arguments = %s %s\n'%(outFile,' '.join(chunkList[ichunk])))
                     condor.write('queue 1\n')
@@ -113,7 +113,7 @@ def main():
                 if not opt.dry: os.system('mkdir -p /eos/cms/{0}/{1}'.format(opt.outDir,pub))
 
     else:
-        print 'Local production'
+        print('Local production')
         dset_list=getEOSlslist(directory=opt.inDir,prepend='')
         for dset in dset_list:
             pub=os.path.basename(dset)
@@ -124,12 +124,12 @@ def main():
                     found=True
                     break
                 if not found : 
-                    print 'Skipping %s, not in process only list'%pub
+                    print('Skipping %s, not in process only list'%pub)
                     continue
 
             chunkList=getChunksInSizeOf(chunkSize=opt.chunkSize,directoryList=[dset],prepend='/eos/cms/')
-            print pub,'will be hadded in',len(chunkList),'chunks of approx %fGb'%opt.chunkSize
-            for ichunk in xrange(0,len(chunkList)):
+            print(pub,'will be hadded in',len(chunkList),'chunks of approx %fGb'%opt.chunkSize)
+            for ichunk in range(0,len(chunkList)):
                 outFile='/eos/cms/{0}/{1}/Chunk_{2}_ext0.root'.format(opt.outDir,pub,ichunk)
                 condor.write('arguments = %s %s\n'%(outFile,' '.join(chunkList[ichunk])))
                 condor.write('queue 1\n')                

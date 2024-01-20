@@ -10,19 +10,19 @@ increments the first and the last bin to show the under- and over-flows
 def fixExtremities(h,addOverflow=True,addUnderflow=True):
     if addUnderflow :
         fbin  = h.GetBinContent(0) + h.GetBinContent(1)
-	fbine = ROOT.TMath.Sqrt(h.GetBinError(0)*h.GetBinError(0) + h.GetBinError(1)*h.GetBinError(1))
-	h.SetBinContent(1,fbin)
-	h.SetBinError(1,fbine)
-	h.SetBinContent(0,0)
-	h.SetBinError(0,0)
+    fbine = ROOT.TMath.Sqrt(h.GetBinError(0)*h.GetBinError(0) + h.GetBinError(1)*h.GetBinError(1))
+    h.SetBinContent(1,fbin)
+    h.SetBinError(1,fbine)
+    h.SetBinContent(0,0)
+    h.SetBinError(0,0)
     if addOverflow:
         nbins = h.GetNbinsX();
-	fbin  = h.GetBinContent(nbins) + h.GetBinContent(nbins+1)
-	fbine = ROOT.TMath.Sqrt(h.GetBinError(nbins)*h.GetBinError(nbins)  + h.GetBinError(nbins+1)*h.GetBinError(nbins+1))
-	h.SetBinContent(nbins,fbin)
-	h.SetBinError(nbins,fbine)
-	h.SetBinContent(nbins+1,0)
-	h.SetBinError(nbins+1,0)
+    fbin  = h.GetBinContent(nbins) + h.GetBinContent(nbins+1)
+    fbine = ROOT.TMath.Sqrt(h.GetBinError(nbins)*h.GetBinError(nbins)  + h.GetBinError(nbins+1)*h.GetBinError(nbins+1))
+    h.SetBinContent(nbins,fbin)
+    h.SetBinError(nbins,fbine)
+    h.SetBinContent(nbins+1,0)
+    h.SetBinError(nbins+1,0)
 
 def scaleTo(h,val):
     """ scale histogram integral to a given value """
@@ -32,7 +32,7 @@ def scaleTo(h,val):
 
 def divideByBinWidth(h):
     """ loop over the bins and divide contents by its width"""
-    for xbin in xrange(1,h.GetNbinsX()+1):
+    for xbin in range(1,h.GetNbinsX()+1):
         wid=h.GetXaxis().GetBinWidth(xbin)
         val=h.GetBinContent(xbin)
         unc=h.GetBinError(xbin)
@@ -179,11 +179,11 @@ class Plot(object):
 
     def show(self, outDir,lumi,noStack=False,saveTeX=False,extraText=None,noRatio=False):
         if len(self.mc)<1 and self.dataH is None and len(self.spimpose)<1:
-            print '%s has 0 or 1 MC!' % self.name
+            print('%s has 0 or 1 MC!' % self.name)
             return
 
-        if len(self.mc)>0 and self.mc.values()[0].InheritsFrom('TH2') :
-            print 'Skipping TH2'
+        if len(self.mc)>0 and list(self.mc.values())[0].InheritsFrom('TH2') :
+            print('Skipping TH2')
             return
 
         cwid=1000 if self.wideCanvas else 500
@@ -246,7 +246,7 @@ class Plot(object):
 
             #compare
             if noStack:
-                refH=self.mc.values()[0]
+                refH=list(self.mc.values())[0]
                 if refH!=self.mc[h] and self.doChi2:
                     chi2=refH.Chi2Test( self.mc[h], 'WW CHI2')
                     pval=refH.Chi2Test( self.mc[h], 'WW')
@@ -261,7 +261,7 @@ class Plot(object):
             nlegCols += 1
 
         if nlegCols ==0 :
-            print '%s is empty'%self.name
+            print('%s is empty'%self.name)
             return
 
         #if not noStack:
@@ -294,7 +294,7 @@ class Plot(object):
             # complete
             systUp=[0.]
             systDown=[0.]
-            for xbin in xrange(1,nominalTTbar.GetNbinsX()+1):
+            for xbin in range(1,nominalTTbar.GetNbinsX()+1):
                 systUp.append(0.)
                 systDown.append(0.)
                 for hname in self.mcsyst:
@@ -309,16 +309,16 @@ class Plot(object):
             totalMCUnc.SetFillColor(ROOT.TColor.GetColor('#99d8c9'))
             ROOT.gStyle.SetHatchesLineWidth(1)
             totalMCUnc.SetFillStyle(3254)
-            for xbin in xrange(1,nominalTTbar.GetNbinsX()+1):
+            for xbin in range(1,nominalTTbar.GetNbinsX()+1):
                 totalMCUnc.SetBinContent(xbin, totalMCUnc.GetBinContent(xbin) + (systUp[xbin]-systDown[xbin])/2.)
                 totalMCUnc.SetBinError(xbin, math.sqrt(totalMCUnc.GetBinError(xbin)**2 + ((systUp[xbin]+systDown[xbin])/2.)**2))
             # shape
             nominalIntegral = nominalTTbar.Integral()
-            for hname,h in self.mcsyst.iteritems():
+            for hname,h in self.mcsyst.items():
                 if (h.Integral()>0.): h.Scale(nominalIntegral/h.Integral())
             systUpShape=[0.]
             systDownShape=[0.]
-            for xbin in xrange(1,nominalTTbar.GetNbinsX()+1):
+            for xbin in range(1,nominalTTbar.GetNbinsX()+1):
                 systUpShape.append(0.)
                 systDownShape.append(0.)
                 for hname in self.mcsyst:
@@ -332,7 +332,7 @@ class Plot(object):
             totalMCUncShape.SetDirectory(0)
             totalMCUncShape.SetFillColor(ROOT.TColor.GetColor('#d73027'))
             totalMCUncShape.SetFillStyle(3254)
-            for xbin in xrange(1,nominalTTbar.GetNbinsX()+1):
+            for xbin in range(1,nominalTTbar.GetNbinsX()+1):
                 totalMCUncShape.SetBinContent(xbin, totalMCUncShape.GetBinContent(xbin) + (systUpShape[xbin]-systDownShape[xbin])/2.)
                 totalMCUncShape.SetBinError(xbin, math.sqrt(totalMCUncShape.GetBinError(xbin)**2 + ((systUpShape[xbin]+systDownShape[xbin])/2.)**2))
             self.totalMCUnc = totalMCUnc
@@ -350,7 +350,7 @@ class Plot(object):
         frame = None
         if totalMC      : frame=totalMC.Clone('frame')
         elif self.dataH : frame=self.dataH.Clone('frame')
-        else            : frame=self.spimpose[self.spimpose.keys()[0]].Clone('frame')
+        else            : frame=self.spimpose[list(self.spimpose.keys())[0]].Clone('frame')
 
         if noStack:
             if self.dataH:   maxY=self.dataH.GetMaximum()*1.25 
@@ -495,7 +495,7 @@ class Plot(object):
                 
                 totalMCnoUnc=totalMC.Clone('totalMCnounc')
                 self._garbageList.append(totalMCnoUnc)
-                for xbin in xrange(1,totalMC.GetNbinsX()+1):
+                for xbin in range(1,totalMC.GetNbinsX()+1):
                     ratioframe.SetBinContent(xbin,1)
                     val=totalMC.GetBinContent(xbin)
                     totalMCnoUnc.SetBinError(xbin,0.)
@@ -552,7 +552,7 @@ class Plot(object):
 
     def convertToTeX(self, outDir):
         if len(self.mc)==0:
-            print '%s is empty' % self.name
+            print('%s is empty' % self.name)
             return
 
         f = open(outDir+'/'+self.name+'.dat','w')
@@ -565,8 +565,8 @@ class Plot(object):
         err = {}
         f.write(' '.ljust(20),)
         try:
-            for xbin in xrange(1,self.mc.values()[0].GetXaxis().GetNbins()+1):
-                pcut=self.mc.values()[0].GetXaxis().GetBinLabel(xbin)
+            for xbin in range(1,list(self.mc.values())[0].GetXaxis().GetNbins()+1):
+                pcut=list(self.mc.values())[0].GetXaxis().GetBinLabel(xbin)
                 f.write(pcut.ljust(40),)
                 tot[xbin]=0
                 err[xbin]=0
@@ -579,7 +579,7 @@ class Plot(object):
             h = self.mc[pname]
             f.write(pname.ljust(20),)
 
-            for xbin in xrange(1,h.GetXaxis().GetNbins()+1):
+            for xbin in range(1,h.GetXaxis().GetNbins()+1):
                 itot=h.GetBinContent(xbin)
                 ierr=h.GetBinError(xbin)
                 pval=' & %f \\pm %f'%(itot,ierr)
@@ -598,7 +598,7 @@ class Plot(object):
         if self.dataH is None: return
         f.write('------------------------------------------\n')
         f.write('Data'.ljust(20),)
-        for xbin in xrange(1,self.dataH.GetXaxis().GetNbins()+1):
+        for xbin in range(1,self.dataH.GetXaxis().GetNbins()+1):
             itot=self.dataH.GetBinContent(xbin)
             pval=' & %d'%itot
             f.write(pval.ljust(40))
@@ -621,7 +621,7 @@ def convertToPoissonErrorGr(h):
     #check https://twiki.cern.ch/twiki/bin/view/CMS/PoissonErrorBars
     alpha = 1 - 0.6827;
     grpois = ROOT.TGraphAsymmErrors(h);
-    for i in xrange(0,grpois.GetN()) :
+    for i in range(0,grpois.GetN()) :
         N = grpois.GetY()[i]
         if N<200 :
             L = 0

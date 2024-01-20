@@ -31,4 +31,4 @@ for param in impacts['params']:
     uncs[systName] += dr**2
 
 for s in uncs:
-    print '%100s & %3.3f'%(s,math.sqrt(uncs[s]))
+    print('%100s & %3.3f'%(s,math.sqrt(uncs[s])))

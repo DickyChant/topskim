@@ -8,8 +8,8 @@ with open(condor_file,'r') as condor:
     lines=condor.readlines()
     args=[l.split('=')[1].strip() for l in lines if 'arguments' in l]
     header=[l.strip() for l in lines if l.find('arguments')!=0 and l.find('queue')!=0]
-print header
-raw_input()
+print(header)
+input()
     
 redo=[]
 for ia in args:
@@ -17,10 +17,10 @@ for ia in args:
     
     #check that output was produced
     outF=os.path.join(a[-1],a[-2])
-    print outF,
+    print(outF, end=' ')
     if not os.path.isfile(outF):
         redo.append(a)
-        print 'not found'
+        print('not found')
         continue
 
     #check it was correctly closed
@@ -35,10 +35,10 @@ for ia in args:
         inF.Close()
     except:
         redo.append(a)
-        print 'is corrupted'
+        print('is corrupted')
         continue
 
-    print 'is good with',nentries,'events'
+    print('is good with',nentries,'events')
 
 with open(condor_file.replace('.condor','_resub.condor'),'w') as condor:
     for l in header:

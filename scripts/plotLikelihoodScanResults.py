@@ -86,7 +86,7 @@ def doContour(data,
         z=data[d][:,2]
 
         if len(z)<10:
-            print 'This scan has less than 10 points...'
+            print('This scan has less than 10 points...')
             return
 
         #interpolate and find minimum
@@ -102,7 +102,7 @@ def doContour(data,
         except:
             bestX=xi[0]
             bestY=yi[0]
-            print 'Failed to find best fit idx',d
+            print('Failed to find best fit idx',d)
         zi=(zi-minz)*2
         z=(z-minz)*2
         
@@ -153,7 +153,7 @@ def main():
     fitres={}
     for ia in range(len(args)):
         tit,url=args[ia].split('=')
-        print 'Reading',url
+        print('Reading',url)
         fIn=ROOT.TFile.Open(url,'READ')
         t=fIn.Get('limit')
         fitres[tit]=[]
@@ -162,7 +162,7 @@ def main():
             if t.deltaNLL<0 : continue
             fitres[tit].append( [getattr(t,p) for p in pList]+[t.deltaNLL] )
         fitres[tit]=np.array(fitres[tit])
-        print len(fitres[tit]),'scan points found for',tit
+        print(len(fitres[tit]),'scan points found for',tit)
 
     #plot the contour interpolating the available points
     if len(pList)==2: 

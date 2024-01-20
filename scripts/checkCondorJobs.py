@@ -27,9 +27,9 @@ def checkPacked(args):
                 except Exception as e:
                     toRun.append((jobArgs,'corrupted/no keys'))    
 
-    print sub,'good jobs:',nGood,'re-run these jobs:',len(toRun)
+    print(sub,'good jobs:',nGood,'re-run these jobs:',len(toRun))
     for x in toRun:
-        print 'sh ${CMSSW_BASE}/src/HeavyIonsAnalysis/topskim/scripts/wrapAnalysis.sh %s'%(' '.join(x[0]))
+        print('sh ${CMSSW_BASE}/src/HeavyIonsAnalysis/topskim/scripts/wrapAnalysis.sh %s'%(' '.join(x[0])))
         os.system('sh ${CMSSW_BASE}/src/HeavyIonsAnalysis/topskim/scripts/wrapAnalysis.sh %s'%(' '.join(x[0])))
 
 

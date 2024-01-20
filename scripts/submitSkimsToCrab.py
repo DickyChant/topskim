@@ -59,8 +59,8 @@ lfnDirBase="/store/group/cmst3/group/hintt/grid_17Jul/"
 submit=True
 
 if submit:
-    print 'Will submit crab jobs. Make sure you have sourced crab.sh'
-    print 'source /cvmfs/cms.cern.ch/crab3/crab.sh'
+    print('Will submit crab jobs. Make sure you have sourced crab.sh')
+    print('source /cvmfs/cms.cern.ch/crab3/crab.sh')
 
 for dset,isData in [
         #('/WJetsToLNu_TuneCP5_HydjetDrumMB_5p02TeV-amcatnloFXFX-pythia8/HINPbPbAutumn18DR-mva98_103X_upgrade2018_realistic_HI_v11-v1/AODSIM',False),
@@ -79,7 +79,7 @@ for dset,isData in [
 
     cfg=createJob(dataset=dset,pset=pset[isData],lumiMask=lumiMask[isData],lfnDirBase=lfnDirBase)
     if submit : 
-        print 'Submitting',cfg
+        print('Submitting',cfg)
         os.system('alias crab=\'/cvmfs/cms.cern.ch/crab3/crab-env-bootstrap.sh\' && crab submit -c %s' % cfg)
 
-print 'Config files are stored in grid/'
+print('Config files are stored in grid/')

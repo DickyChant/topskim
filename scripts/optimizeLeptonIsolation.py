@@ -167,9 +167,9 @@ def tuneIsolation(mixFile,ch,matchedll=None):
     if matchedll:
         mc_kin,mc_isoEstimators,mc_globalEvent=getVariables(matchedll)
 
-    qkin=np.percentile(kin,range(0,120,30),axis=0)
-    qiso=np.percentile(isoEstimators,range(0,110,10),axis=0)
-    qGlobalEvent=np.percentile(globalEvent,range(0,110,10),axis=0)
+    qkin=np.percentile(kin,list(range(0,120,30)),axis=0)
+    qiso=np.percentile(isoEstimators,list(range(0,110,10)),axis=0)
+    qGlobalEvent=np.percentile(globalEvent,list(range(0,110,10)),axis=0)
 
     rocCurves=[]
     sfisoHistos=[]
@@ -448,17 +448,17 @@ def main():
     matchedll={11*11:None,13*13:None}
     if len(sys.argv)>1:
        
-        print 'Processing MC truth from',MCTAG
+        print('Processing MC truth from',MCTAG)
         prepareDileptonCollection(sys.argv[1],MCTAG,maxEvents=100000)
 
         #readout matched leptons
-        print 'Opening pickle file'
+        print('Opening pickle file')
         with open('dilepton_summary_%s.pck'%MCTAG,'r') as cache:
             allDileptons=pickle.load(cache)
             for ch in matchedll:
                 #matchedll[ch]=[ll for ll in allDileptons[(ch,False)] if ll.l1.matched and ll.l2.matched]
                 matchedll[ch]=[ll for ll in allDileptons[(ch,True)] ]
-                print len(matchedll[ch]),ch
+                print(len(matchedll[ch]),ch)
 
     sfisoHistos=[]
     for ch in matchedll:

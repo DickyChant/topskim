@@ -48,13 +48,13 @@ class TopBtagInMediumModel(PhysicsModel):
         for po in physOptions:
             if 'delta_acc' in po:
                 self.delta_acc=float(po.split('=')[1])
-                print 'Acceptance uncertainty',self.delta_acc
+                print('Acceptance uncertainty',self.delta_acc)
             if 'sigma_pp' in po:
                 self.sigma_pp=float(po.split('=')[1])
-                print 'Reference pp xsec=',self.sigma_pp
+                print('Reference pp xsec=',self.sigma_pp)
             if 'A' in po:
                 self.A=float(po.split('=')[1])
-                print 'A=',self.A
+                print('A=',self.A)
                                                                                                             
     def doParametersOfInterest(self):
 

@@ -26,7 +26,7 @@ def getBaseNames(dirname):
             except:
                 pass
             basename, number = filename.rsplit('_',1)
-            print basename,number,goodFile
+            print(basename,number,goodFile)
             if (not goodFile):
                 badFiles.append(dirname+'/'+item)
                 continue
@@ -39,17 +39,17 @@ def getBaseNames(dirname):
             names.add(basename)
 
         except ValueError:
-            print filename,'is single'
+            print(filename,'is single')
             names.add(filename)
     return names
 
 try:
     inputdir = sys.argv[1]
     if not os.path.isdir(inputdir):
-        print "Input directory not found:", inputdir
+        print("Input directory not found:", inputdir)
         exit(-1)
 except IndexError:
-    print "Need to provide an input directory."
+    print("Need to provide an input directory.")
     exit(-1)
 
 noTrees=False
@@ -62,18 +62,18 @@ if len(sys.argv)>3 : outputdir=sys.argv[3]
 chunkdir  = os.path.join(inputdir, 'Chunks')
 basenames = getBaseNames(chunkdir)
 
-print '-----------------------'
-print 'Will process the following samples:', basenames
+print('-----------------------')
+print('Will process the following samples:', basenames)
 
 os.system('mkdir -p %s' % chunkdir)
 
-for basename, files in counters.iteritems():
+for basename, files in counters.items():
 
     filenames = " ".join(files)
     target = os.path.join(outputdir,"%s.root" % basename)
 
     # merging:
-    print '... processing', basename
+    print('... processing', basename)
     if noTrees:
         cmd = 'hadd -f -T %s %s' % (target, filenames)
     else:
@@ -81,7 +81,7 @@ for basename, files in counters.iteritems():
     os.system(cmd)
 
 if (len(badFiles) > 0):
-    print '-----------------------'
-    print 'The following files are not done yet or require resubmission, please check LSF output:'
+    print('-----------------------')
+    print('The following files are not done yet or require resubmission, please check LSF output:')
     for file in badFiles:
-        print file,
+        print(file, end=' ')

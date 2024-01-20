@@ -238,7 +238,7 @@ def compareFitResult(plotsPrefit,plotsPostfit,plotName,xtitle,extraTxt=[]):
 def main():
    url=sys.argv[1]
    if not os.path.isfile(url):
-      print url,'is not a file'
+      print(url,'is not a file')
       sys.exit()
    doPostFitPlot(url)
    

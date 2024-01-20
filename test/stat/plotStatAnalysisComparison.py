@@ -104,7 +104,7 @@ def main():
 
         url=fitres[r]['dir']
         title=fitres[r]['title']
-        print 'Parsing results from',url
+        print('Parsing results from',url)
                   
         fitres[r]['sigtoys'] = getResultsFromToys(url+'/higgsCombinesig_toys.Significance.mH120.123456.root','limit')
         sigobs=getResultsFromToys(url+'/higgsCombinesig_obs.Significance.mH120.root','limit')
@@ -221,7 +221,7 @@ def main():
     #put all under StatAnaSummary
     os.system('mkdir -p StatAnaSummary')
     os.system('mv *.{png,pdf} StatAnaSummary')
-    print 'Plots are available in StatAnaSummary'
+    print('Plots are available in StatAnaSummary')
 
 if __name__ == "__main__":
     sys.exit(main())

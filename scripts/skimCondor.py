@@ -14,10 +14,10 @@ if __name__ == '__main__':
     (options, args) = parser.parse_args()
 
     if not options.targetdir:
-        print 'no target directory given... exiting'
+        print('no target directory given... exiting')
         sys.exit(0)
     if not options.directory:
-        print 'no source directory given... exiting'
+        print('no source directory given... exiting')
         sys.exit(0)
 
     cmsenv = os.environ['CMSSW_BASE']
@@ -52,9 +52,9 @@ if __name__ == '__main__':
                 continue
             filelist.append(os.path.join(p,fn))
 
-    print 'there are {n} valid files in the directory {d} and its subdirectories'.format(n=len(filelist), d=options.directory)
+    print('there are {n} valid files in the directory {d} and its subdirectories'.format(n=len(filelist), d=options.directory))
 
-    print 'grouping them into bunches of', str(options.nfiles)
+    print('grouping them into bunches of', str(options.nfiles))
 
 
     bunches = []
@@ -107,11 +107,11 @@ environment = "LS_SUBCWD={here}"
 
     
     if options.dryRun:
-        print 'this was just a dry run...'
-        print 'wrote file', tmp_condor_filename
+        print('this was just a dry run...')
+        print('wrote file', tmp_condor_filename)
      
     else:
-        print 'submitting to condor...'
+        print('submitting to condor...')
         os.system('condor_submit '+ tmp_condor_filename)
 
 

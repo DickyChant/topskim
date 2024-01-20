@@ -3,7 +3,7 @@ import os,sys
 from subprocess import Popen, PIPE
 
 if len(sys.argv)<4:
-    print "python scripts/launchAnalysis.py input output tag [extraOpts]"
+    print("python scripts/launchAnalysis.py input output tag [extraOpts]")
     exit(-1)
 
 input=sys.argv[1]
@@ -16,7 +16,7 @@ extraOpts=' '.join(sys.argv[4:]) if len(sys.argv)>4 else ''
 os.system('mkdir -p %s'%output)
 
 #create condor jobs
-print 'Condor submission script is condor_%s.sub'%tag
+print('Condor submission script is condor_%s.sub'%tag)
 with open('condor_%s.sub'%tag,'w') as c:
     c.write('executable  = %s/src/HeavyIonsAnalysis/topskim/scripts/wrapAnalysis.sh\n'%cmssw)
     c.write('output      = condor_%s.out\n'%tag)

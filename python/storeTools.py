@@ -10,7 +10,7 @@ def getEOSlslist(directory, mask='', prepend='root://eoscms//eos/cms/'):
 
 
     from subprocess import Popen, PIPE
-    print 'looking into: '+directory+'...'
+    print('looking into: '+directory+'...')
 
     #eos should be mounted
     data = Popen(['ls', '/eos/cms/%s'%directory],stdout=PIPE)

@@ -51,7 +51,7 @@ elif fit=='incbtag':
 elif fit=='hpurbtag':
     cats=['emhpur0pfb','emhpurgeq1pfb','mmhpur0pfb','mmhpurgeq1pfb','eehpur0pfb','eehpurgeq1pfb']
 else:
-    print 'Unknown fit:',fit
+    print('Unknown fit:',fit)
     sys.exit(-1)
 
 opts=''
@@ -67,6 +67,6 @@ resStat=getFitresult('higgsCombineTest.MultiDimFit.mH120.root')
 
 systHi=ROOT.TMath.Sqrt(resTot[1]**2-resStat[1]**2)
 systLo=ROOT.TMath.Sqrt(resTot[2]**2-resStat[2]**2)
-print '%3.3f +%3.3f-%3.3f (syst) +%3.3f-%3.3f (stat)'%(resTot[0],systHi,systLo,resStat[1],resStat[2])
-print resTot
-print resStat
+print('%3.3f +%3.3f-%3.3f (syst) +%3.3f-%3.3f (stat)'%(resTot[0],systHi,systLo,resStat[1],resStat[2]))
+print(resTot)
+print(resStat)

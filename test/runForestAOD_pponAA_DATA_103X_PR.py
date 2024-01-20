@@ -43,7 +43,7 @@ process.source = cms.Source("PoolSource",
     )
 
 if options.inputFiles:
-    print options.inputFiles
+    print(options.inputFiles)
     process.source.fileNames=cms.untracked.vstring(options.inputFiles)
 
 from FWCore.PythonUtilities.LumiList import LumiList

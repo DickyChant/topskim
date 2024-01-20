@@ -46,7 +46,7 @@ corr.sort(key=lambda x: x[2],reverse=True)
 redcorr=[x for x in corr if x[2]>0.1]
 #redcorr=[x for x in corr]
 for a,b,_,corr,ybin in redcorr:
-    print a,b,corr,ybin
+    print(a,b,corr,ybin)
 
 #by value 
 binsOfInterest=[x[4] for x in redcorr]

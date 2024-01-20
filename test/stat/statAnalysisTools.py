@@ -53,12 +53,12 @@ def getResultsFromToys(url,branch='limit'):
         t=fIn.Get('limit')
         for k in range(t.GetEntriesFast()):
             t.GetEntry(k)
-            if isinstance(branch, basestring):
+            if isinstance(branch, str):
                 sigToys.append(getattr(t,branch))
             else:
                 sigToys.append( [getattr(t,b) for b in branch] )
     except:
-        print 'Check',url
+        print('Check',url)
         pass
 
     return sigToys
@@ -97,7 +97,7 @@ def showToys(toys,obs,name,title,xtitle,xbins,xran,yran):
         pval+=1.0
     pval /= len(toys)
     if pval>0.5 : pval=1-pval
-    print obs,yran,pval
+    print(obs,yran,pval)
     plt.plot([obs,obs], [yran[0],yran[1]*0.8], ls='-', linewidth=3, label=r'Obs. %3.2f (p-val=%3.2f)'%(obs,pval))
 
     ax.set_ylim(yran[0],yran[1])

@@ -16,25 +16,25 @@ def checkPacked(args):
             else:
                 try:
                     if not os.path.getsize(outF):
-                        print 'file has size 0', outF
+                        print('file has size 0', outF)
                         raise ValueError
                     fIn=ROOT.TFile.Open(outF)
                     if not fIn:
-                        print 'file is a null pointer', outF
+                        print('file is a null pointer', outF)
                         raise ValueError
                     if (fIn.IsZombie()):
-                        print 'file is zombie', outF
+                        print('file is zombie', outF)
                         raise ValueError
                     n=fIn.GetListOfKeys().GetSize()
                     if n<=1:
-                        print 'no keys', outF
+                        print('no keys', outF)
                         raise ValueError
                     fIn.Close()
                     nGood+=1
                 except ValueError as e:
                     toRun.append((jobArgs,'corrupted/no keys'))    
 
-    print sub,'good jobs:',nGood,'re-run these jobs:',len(toRun)
+    print(sub,'good jobs:',nGood,'re-run these jobs:',len(toRun))
     return toRun
     ##for x in toRun:
     ##    os.system('sh scripts/wrapAnalysis.sh %s'%(' '.join(x[0])))
@@ -50,8 +50,8 @@ for f in os.listdir(condor_dir):
     resubArgs += checkPacked(f)
 
 if len(resubArgs):
-    print 'Condor resubmission'
-    print 'will resubmit this number of jobs', len(resubArgs)
+    print('Condor resubmission')
+    print('will resubmit this number of jobs', len(resubArgs))
 
     with open('condor_resubmit.sub','w') as c:
         c.write('executable  = %s/src/HeavyIonsAnalysis/topskim/scripts/wrapAnalysis.sh\n'%resubArgs[0][0][0])
@@ -67,12 +67,12 @@ if len(resubArgs):
             c.write('arguments   = {args} \n'.format(args= ' '.join(res[0])))
             c.write('queue 1\n')
 
-    resub = raw_input("do you want to resub these jobs to the batch? [y/n]")
+    resub = input("do you want to resub these jobs to the batch? [y/n]")
 
     if resub in ['y','yes','Y','YES', 'Yes']:
         os.system('condor_submit condor_resubmit.sub')
     else:
-        print 'did not resubmit. the file is there if you want to do it by hand'
+        print('did not resubmit. the file is there if you want to do it by hand')
 
 else:
-    print ' all good. all files there!'
+    print(' all good. all files there!')

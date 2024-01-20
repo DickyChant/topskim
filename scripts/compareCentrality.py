@@ -50,6 +50,6 @@ txt.DrawLatex(0.12,0.97,'#bf{CMS} #it{preliminary}')
 cnv.Modified()
 cnv.Update()
 cnv.SaveAs('cenweight.pdf')
-raw_input()
+input()
 
 
