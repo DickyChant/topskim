@@ -38,3 +38,5 @@ qamar_scripts/
 .__afs*
 
 **/*.bak
+
+test*

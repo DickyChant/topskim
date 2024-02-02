@@ -438,10 +438,11 @@ int main(int argc, char* argv[])
   // Initialize the btagging SF stuff
   BTagSFUtil * myBTagUtil = new BTagSFUtil(42);
   TRandom3 * rand = new TRandom3(2);
-
+  cout << __LINE__ << endl;
   //Get Tree info
   char* read = new char[100];
-  TChain *hiInfoTree_p  = new TChain("HiForest/HiForestInfo");
+  // TChain *hiInfoTree_p  = new TChain("HiForest/HiForestInfo");
+  TChain *hiInfoTree_p  = new TChain("HiForestInfo/HiForest");
   hiInfoTree_p->Add(inURL);
   TBranch *branch = hiInfoTree_p->GetBranch("GlobalTag");
   branch->SetAddress((void*)read);
@@ -454,7 +455,8 @@ int main(int argc, char* argv[])
   ForestSkim fForestSkim(globalTree_p);
 
   //configure leptons
-  TString lepTreeName("ggHiNtuplizerGED/EventTree");
+  // TString lepTreeName("ggHiNtuplizerGED/EventTree");
+  TString lepTreeName("ggHiNtuplizer/EventTree");
   if(isPP) lepTreeName="ggHiNtuplizer/EventTree";
   if(GT.find("75X_mcRun2")!=string::npos) lepTreeName="ggHiNtuplizer/EventTree";
   TChain *lepTree_p     = new TChain(lepTreeName);
@@ -463,12 +465,14 @@ int main(int argc, char* argv[])
   ForestGen fForestGen(lepTree_p);
 
   //configure PF cands
-  TChain *pfCandTree_p  = new TChain("pfcandAnalyzer/pfTree");
+  // TChain *pfCandTree_p  = new TChain("pfcandAnalyzer/pfTree");
+  TChain *pfCandTree_p  = new TChain("particleFlowAnalyser/pftree");
   pfCandTree_p->Add(inURL);
   ForestPFCands fForestPF(pfCandTree_p);
 
   //configure jets
-  TChain *jetTree_p     = new TChain(isPP ? "ak4PFJetAnalyzer/t" : "akFlowPuCs4PFJetAnalyzer/t");
+  // TChain *jetTree_p     = new TChain(isPP ? "ak4PFJetAnalyzer/t" : "akFlowPuCs4PFJetAnalyzer/t");
+  TChain *jetTree_p     = new TChain(isPP ? "ak4PFJetAnalyzer/t" : "akCs4PFJetAnalyzer/t");
   jetTree_p->Add(inURL);
   ForestJets fForestJets(jetTree_p);
 
@@ -494,7 +498,8 @@ int main(int argc, char* argv[])
     hltTree_p->SetBranchStatus(eTrigName+"1",1);
     hltTree_p->SetBranchAddress(eTrigName+"1",&etrig);
   }else{
-    muTrigName="HLT_HIL3Mu12_v";
+    // muTrigName="HLT_HIL3Mu12_v";
+    muTrigName="HLT_HIL3SingleMu12_v";
     eTrigName="HLT_HIEle20Gsf_v";
     if(isSingleMuPD || isMuSkimedMCPD) mtrig = 1;
     if(isSingleElePD || isEleSkimedMCPD) etrig = 1;
@@ -520,17 +525,17 @@ int main(int argc, char* argv[])
     eleHLTObjs=new ForestHLTObject(eleHLTObj_p);
   }
 
-  TChain *rhoTree_p = new TChain("hiFJRhoAnalyzerFinerBins/t");
-  rhoTree_p->Add(inURL);
-  std::vector<Double_t> *t_rho=0,*t_rhom=0,*t_etaMin=0,*t_etaMax=0;
-  if(rhoTree_p){
-    rhoTree_p->SetBranchAddress("rho", &t_rho);
-    rhoTree_p->SetBranchAddress("etaMin", &t_etaMin);
-    rhoTree_p->SetBranchAddress("etaMax", &t_etaMax);
-    rhoTree_p->SetBranchAddress("rhom", &t_rhom);
-  }else{
-    std::cout << "[WARN] Can't find rho tree hiFJRhoAnalyzerFinerBins/t" << std::endl;
-  }
+  // TChain *rhoTree_p = new TChain("hiFJRhoAnalyzerFinerBins/t");
+  // rhoTree_p->Add(inURL);
+  // std::vector<Double_t> *t_rho=0,*t_rhom=0,*t_etaMin=0,*t_etaMax=0;
+  // if(rhoTree_p){
+  //   rhoTree_p->SetBranchAddress("rho", &t_rho);
+  //   rhoTree_p->SetBranchAddress("etaMin", &t_etaMin);
+  //   rhoTree_p->SetBranchAddress("etaMax", &t_etaMax);
+  //   rhoTree_p->SetBranchAddress("rhom", &t_rhom);
+  // }else{
+  //   std::cout << "[WARN] Can't find rho tree hiFJRhoAnalyzerFinerBins/t" << std::endl;
+  // }
   
   // =============================================================
   // marc here make the output tree
@@ -560,8 +565,8 @@ int main(int argc, char* argv[])
   outTree->Branch("cenbin", &t_cenbin, "cenbin/F");
   outTree->Branch("ncollWgt", &t_ncollWgt, "ncollWgt/F");
   
-  outTree->Branch("rho",    &t_rho);
-  outTree->Branch("rhom",   &t_rhom);
+  // outTree->Branch("rho",    &t_rho);
+  // outTree->Branch("rhom",   &t_rhom);
 
   Float_t t_globalrho;
   outTree->Branch("globalrho", &t_globalrho, "globalrho/F");
@@ -663,50 +668,50 @@ int main(int argc, char* argv[])
   outTree->Branch("apt"    , &t_apt    , "apt/F");
   outTree->Branch("dphilll2"    , &t_dphilll2    , "dphilll2/F");
 
-  Float_t t_bdt, t_bdt_rarity, t_fisher2;
-  outTree->Branch("bdt", &t_bdt, "bdt/F");
-  outTree->Branch("bdtrarity", &t_bdt_rarity, "bdtrarity/F");
-  outTree->Branch("fisher2", &t_fisher2, "fisher2/F");
-  // =============================================================
-  //
-  TMVA::Tools::Instance();
-  TMVA::Reader *reader        = new TMVA::Reader( "!Color:!Silent" );
-  TMVA::Reader *readerFisher2 = new TMVA::Reader( "!Color:!Silent" );
+  // Float_t t_bdt, t_bdt_rarity, t_fisher2;
+  // outTree->Branch("bdt", &t_bdt, "bdt/F");
+  // outTree->Branch("bdtrarity", &t_bdt_rarity, "bdtrarity/F");
+  // outTree->Branch("fisher2", &t_fisher2, "fisher2/F");
+  // // =============================================================
+  // //
+  // TMVA::Tools::Instance();
+  // TMVA::Reader *reader        = new TMVA::Reader( "!Color:!Silent" );
+  // TMVA::Reader *readerFisher2 = new TMVA::Reader( "!Color:!Silent" );
 
-  // make new variables because i'm too lazy to think right now
-  Float_t bdt_l1pt, bdt_apt, bdt_abslleta, bdt_dphilll2, bdt_sumabseta;//, bdt_flavor;
+  // // make new variables because i'm too lazy to think right now
+  // Float_t bdt_l1pt, bdt_apt, bdt_abslleta, bdt_dphilll2, bdt_sumabseta;//, bdt_flavor;
 
-  // these must have the same name as in the training. and the same ordeeeeeeer
-  // copy directly from the script that runs the training:
-  //dataloader.AddVariable('lep_pt[0]'  , 'p_{T}^{lep1}'     , 'GeV' , 'F')
-  //dataloader.AddVariable('apt'        , 'A_{pt}'           , ''    , 'F')
-  //dataloader.AddVariable('llpt'       , 'p_{T}^{ll}'       , 'GeV' , 'F')
-  //dataloader.AddVariable('abs(lleta)' , '|#eta^{ll}|'      , ''    , 'F')
-  //dataloader.AddVariable('dphi'       , '|#Delta #phi|'    , 'rad' , 'F')
-  //dataloader.AddVariable('abs(lep_eta[0])+abs(lep_eta[1])' , '#sum |#eta_{i}|', ''    , 'F')
-  //dataloader.AddVariable('abs(lep_pdgId[0]*lep_pdgId[1])'  , 'flavor', ''    , 'F')
-  //
-  reader->AddVariable("lep_pt[0]"  , &bdt_l1pt    );
-  reader->AddVariable("apt"        , &bdt_apt     );
-  reader->AddVariable("llpt"       , &t_llpt      );
-  reader->AddVariable("abs(lleta)" , &bdt_abslleta);
-  reader->AddVariable("abs(dphi)"  , &t_dphi      );
-  reader->AddVariable("abs(lep_eta[0])+abs(lep_eta[1])", &bdt_sumabseta);
+  // // these must have the same name as in the training. and the same ordeeeeeeer
+  // // copy directly from the script that runs the training:
+  // //dataloader.AddVariable('lep_pt[0]'  , 'p_{T}^{lep1}'     , 'GeV' , 'F')
+  // //dataloader.AddVariable('apt'        , 'A_{pt}'           , ''    , 'F')
+  // //dataloader.AddVariable('llpt'       , 'p_{T}^{ll}'       , 'GeV' , 'F')
+  // //dataloader.AddVariable('abs(lleta)' , '|#eta^{ll}|'      , ''    , 'F')
+  // //dataloader.AddVariable('dphi'       , '|#Delta #phi|'    , 'rad' , 'F')
+  // //dataloader.AddVariable('abs(lep_eta[0])+abs(lep_eta[1])' , '#sum |#eta_{i}|', ''    , 'F')
+  // //dataloader.AddVariable('abs(lep_pdgId[0]*lep_pdgId[1])'  , 'flavor', ''    , 'F')
+  // //
+  // reader->AddVariable("lep_pt[0]"  , &bdt_l1pt    );
+  // reader->AddVariable("apt"        , &bdt_apt     );
+  // reader->AddVariable("llpt"       , &t_llpt      );
+  // reader->AddVariable("abs(lleta)" , &bdt_abslleta);
+  // reader->AddVariable("abs(dphi)"  , &t_dphi      );
+  // reader->AddVariable("abs(lep_eta[0])+abs(lep_eta[1])", &bdt_sumabseta);
 
-  // for the fisher just take these two
-  //dataloader.AddVariable('llpt'       , 'p_{T}^{ll}'       , 'GeV' , 'F')
-  //dataloader.AddVariable('dphi'       , '|#Delta #phi|'    , 'rad' , 'F')
-  readerFisher2->AddVariable("llpt", &t_llpt);
-  readerFisher2->AddVariable("abs(dphi)", &t_dphi);
+  // // for the fisher just take these two
+  // //dataloader.AddVariable('llpt'       , 'p_{T}^{ll}'       , 'GeV' , 'F')
+  // //dataloader.AddVariable('dphi'       , '|#Delta #phi|'    , 'rad' , 'F')
+  // readerFisher2->AddVariable("llpt", &t_llpt);
+  // readerFisher2->AddVariable("abs(dphi)", &t_dphi);
 
-  TString methodName       ("BDTG method");
-  TString methodNameFisher2("Fisher method");
-  // hard coded path for now ...
-  TString weightFile("/afs/cern.ch/work/m/mdunser/public/cmssw/heavyIons/CMSSW_9_4_6_patch1/src/HeavyIonsAnalysis/topskim/scripts/training_dy/weights/TMVAClassification_BDTG.weights.xml");
-  reader->BookMVA( methodName, weightFile);
+  // TString methodName       ("BDTG method");
+  // TString methodNameFisher2("Fisher method");
+  // // hard coded path for now ...
+  // TString weightFile("/afs/cern.ch/work/m/mdunser/public/cmssw/heavyIons/CMSSW_9_4_6_patch1/src/HeavyIonsAnalysis/topskim/scripts/training_dy/weights/TMVAClassification_BDTG.weights.xml");
+  // reader->BookMVA( methodName, weightFile);
 
-  TString weightFileFisher2("/afs/cern.ch/work/m/mdunser/public/cmssw/heavyIons/CMSSW_9_4_6_patch1/src/HeavyIonsAnalysis/topskim/scripts/training_dy_fisher2/weights/TMVAClassification_Fisher.weights.xml");
-  readerFisher2->BookMVA( methodNameFisher2, weightFileFisher2);
+  // TString weightFileFisher2("/afs/cern.ch/work/m/mdunser/public/cmssw/heavyIons/CMSSW_9_4_6_patch1/src/HeavyIonsAnalysis/topskim/scripts/training_dy_fisher2/weights/TMVAClassification_Fisher.weights.xml");
+  // readerFisher2->BookMVA( methodNameFisher2, weightFileFisher2);
 
     
   Double_t wgtSum(0);
@@ -740,7 +745,7 @@ int main(int argc, char* argv[])
     jetTree_p->GetEntry(entry);    
     hltTree_p->GetEntry(entry);
     hiTree_p->GetEntry(entry);
-    if(rhoTree_p) rhoTree_p->GetEntry(entry);
+    // if(rhoTree_p) rhoTree_p->GetEntry(entry);
     if(muHLTObj_p ) muHLTObj_p->GetEntry(entry);
     if(eleHLTObj_p)  eleHLTObj_p->GetEntry(entry);
     
@@ -888,9 +893,10 @@ int main(int argc, char* argv[])
       if(!fForestSkim.pprimaryVertexFilter) continue;
     }
 
-    //build jets from different PF candidate collections   
+    //build jets from different PF candidate collections  
+    std::cout << "checking PF cand\t" << fForestPF.nPF << std::endl; 
     SlimmedPFCollection_t pfColl;
-    for(size_t ipf=0; ipf<fForestPF.pfId->size(); ipf++) {
+    for(int ipf=0; ipf<fForestPF.nPF; ipf++) {
       int id(abs(fForestPF.pfId->at(ipf)));
       float mass(0.13957);  //pions
       if(id==4) mass=0.;    //photons
@@ -924,8 +930,9 @@ int main(int argc, char* argv[])
     std::vector<LeptonSummary> noIdMu;
     std::vector<TLorentzVector> muHLTP4;
     if(muHLTObjs) muHLTP4=muHLTObjs->getHLTObjectsP4();
+    cout << __LINE__ << endl;
     for(unsigned int muIter = 0; muIter < fForestLep.muPt->size(); ++muIter) {
-      
+    cout << __LINE__ << endl;
       //kinematics selection
       TLorentzVector p4(0,0,0,0);
       float rawpt(fForestLep.muPt->at(muIter));
@@ -953,8 +960,8 @@ int main(int argc, char* argv[])
       l.nhiso   = fForestLep.muPFNeuIso->at(muIter);
       l.phoiso  = fForestLep.muPFPhoIso->at(muIter);
       l.isofull = l.chiso+l.nhiso+l.phoiso;
-      int   tmp_rhoind  = getRhoIndex(p4.Eta(),t_etaMin,t_etaMax);
-      l.rho = isPP ? globalrho : t_rho->at(tmp_rhoind);
+      // int   tmp_rhoind  = getRhoIndex(p4.Eta(),t_etaMin,t_etaMax);
+      // l.rho = isPP ? globalrho : t_rho->at(tmp_rhoind);
       
       l.isofullR=getIsolationFull( pfColl, l.p4);
       l.miniiso = getMiniIsolation( pfColl ,l.p4, l.id);
@@ -1061,8 +1068,8 @@ int main(int argc, char* argv[])
         l.phoiso  = fForestLep.elePFPhoIso->at(eleIter);
       }
       l.isofull = l.chiso+l.nhiso+l.phoiso;
-      int   tmp_rhoind  = getRhoIndex(p4.Eta(),t_etaMin,t_etaMax);
-      l.rho = isPP ? globalrho : t_rho->at(tmp_rhoind);
+      // int   tmp_rhoind  = getRhoIndex(p4.Eta(),t_etaMin,t_etaMax);
+      // l.rho = isPP ? globalrho : t_rho->at(tmp_rhoind);
 
       l.isofullR= getIsolationFull( pfColl, l.p4);
       l.miniiso = getMiniIsolation( pfColl ,l.p4, l.id);
@@ -1687,18 +1694,18 @@ int main(int argc, char* argv[])
     t_ht  = pfht;
     t_mht = vis.Pt();
     
-    // now set the 4 variables that we added for the tmva reader for the bdt evaluation
-    bdt_l1pt      = t_lep_calpt[0];
-    bdt_apt       = (t_lep_calpt[0]-t_lep_calpt[1])/(t_lep_calpt[0]+t_lep_calpt[1]);
-    bdt_abslleta  = fabs(t_lleta);
-    bdt_dphilll2  = fabs(dphi_2(t_lep_calpt[0],t_lep_eta[0],t_lep_phi[0],t_lep_calpt[1],t_lep_eta[1],t_lep_phi[1],2)); // this function is in functions.cc in scripts/
-    bdt_sumabseta = fabs(t_lep_eta[0])+fabs(t_lep_eta[1]);
-    //bdt_flavor    = abs(t_lep_pdgId[0]*t_lep_pdgId[1]); //abs should be fine here, it's an int
-    t_apt         = bdt_apt;
-    t_dphilll2    = bdt_dphilll2;
-    t_bdt         = reader->EvaluateMVA( methodName );
-    t_bdt_rarity  = reader->GetRarity  ( methodName );
-    t_fisher2     = readerFisher2->EvaluateMVA( methodNameFisher2 );
+    // // now set the 4 variables that we added for the tmva reader for the bdt evaluation
+    // bdt_l1pt      = t_lep_calpt[0];
+    // bdt_apt       = (t_lep_calpt[0]-t_lep_calpt[1])/(t_lep_calpt[0]+t_lep_calpt[1]);
+    // bdt_abslleta  = fabs(t_lleta);
+    // bdt_dphilll2  = fabs(dphi_2(t_lep_calpt[0],t_lep_eta[0],t_lep_phi[0],t_lep_calpt[1],t_lep_eta[1],t_lep_phi[1],2)); // this function is in functions.cc in scripts/
+    // bdt_sumabseta = fabs(t_lep_eta[0])+fabs(t_lep_eta[1]);
+    // //bdt_flavor    = abs(t_lep_pdgId[0]*t_lep_pdgId[1]); //abs should be fine here, it's an int
+    // t_apt         = bdt_apt;
+    // t_dphilll2    = bdt_dphilll2;
+    // t_bdt         = reader->EvaluateMVA( methodName );
+    // t_bdt_rarity  = reader->GetRarity  ( methodName );
+    // t_fisher2     = readerFisher2->EvaluateMVA( methodNameFisher2 );
     t_bjet_leadPassTight = (t_bjet_csvv2.size()>0 && t_bjet_csvv2[0]>csvWPList[1]);
     t_isData = !isMC;
     
